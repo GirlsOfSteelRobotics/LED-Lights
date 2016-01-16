@@ -55,6 +55,10 @@ void setup()
 void loop()
 {
   //https://code.google.com/p/fastspi/wiki/CRGBreference	
+  solid_color(CRGB::Cyan);
+  delay(1000);
+  solid_color(CRGB::Red);
+  delay(1000);
   color_chase(CRGB::Green, 10);
   color_chase(CRGB::BlueViolet, 10);
   CRGB temp_rgb;
@@ -69,10 +73,21 @@ void loop()
   missing_dot_chase(0x3000cc, 25) ;
 }
 
+void solid_color(uint32_t color)
+{
+  FastLED.setBrightness(50);
+  for(int led_number = 0; led_number < NUM_LEDS; led_number++)
+  {
+    leds[led_number] = color; 
+  }
+  FastLED.show();
+  delay(1);
+}
+
 void color_chase(uint32_t color, uint8_t wait)
 {	
   FastLED.clear();
-  FastLED.setBrightness(100);
+  FastLED.setBrightness(50);
   // Move a single led
   for(int led_number = 0; led_number < NUM_LEDS; led_number++)
   {
@@ -105,7 +120,7 @@ void missing_dot_chase(uint32_t color, uint8_t wait)
     for(led_number = 0; led_number < NUM_LEDS; led_number++)
     {
       leds[led_number] = CRGB::Black; // Set new pixel 'off'
-      if( led_number > 0 && led_number < NUM_LEDS)
+      if( led_number > 0)
       {
         leds[led_number-1] = color; // Set previous pixel 'on'
       }
