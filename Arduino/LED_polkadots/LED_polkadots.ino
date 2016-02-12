@@ -9,7 +9,7 @@
 
 //https://code.google.com/p/fastspi/
 //https://code.google.com/p/fastspi/wiki/CRGBreference
-#include "FastSPI_LED2.h"
+#include "FastLED.h"
 
 // How many leds are in the strip? AndyMark's 2.5 meter strip has 80 leds 
 #define NUM_LEDS 80
