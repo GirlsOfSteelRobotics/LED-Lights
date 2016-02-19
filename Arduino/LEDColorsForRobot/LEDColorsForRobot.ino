@@ -71,11 +71,11 @@ void loop() {
     color = commandToColor(command); 
   }
 #else
-  color = CRGB::White; 
+  color = CRGB::Pink; 
 #endif
- // color = CRGB::Green; 
-    color_chase(color, 100);
-      delay(100);
+ color = CRGB::Red; 
+    //color_chase(color, 100);
+      //delay(100);
 for(int i = 0; i < NUM_LEDS; i++) {
   leds[i] = color;
 }
@@ -93,15 +93,24 @@ uint32_t commandToColor(int command){
       break;
     case 'b':
       color = CRGB::Blue;
+      for(int i = 0; i < NUM_LEDS; i++) {
+      leds[i] = color;
+      }
       break;
     case 'g':
       color = CRGB::Green;
+      for(int i = 0; i < NUM_LEDS; i++) {
+      leds[i] = color;
+      }
       break;
     case 'p':
       missing_dot_chase(CRGB::Red, 25);   
       break;
     case 'r':
       color = CRGB::Red;
+      for(int i = 0; i < NUM_LEDS; i++) {
+      leds[i] = color;
+      }
       break;
     case 'w':
       color = CRGB::White;
