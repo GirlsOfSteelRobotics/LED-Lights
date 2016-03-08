@@ -1,8 +1,7 @@
 #include "FastLED.h"
 
-#define NUM_LEDS 80
-#define DATA_PIN 11
-#define CLOCK_PIN 13
+#define NUM_LEDS 150
+//#define DATA_PIN 11
 #define POWER_UP (-1)
 
 CRGB leds[NUM_LEDS];
@@ -12,7 +11,7 @@ int foreground = 0;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
-  FastLED.addLeds<WS2801, RGB>(leds, NUM_LEDS); 
+  FastLED.addLeds<NEOPIXEL, 11>(leds, NUM_LEDS); 
   FastLED.clear();
   FastLED.setBrightness(80); 
   Serial.begin(9600);
@@ -20,8 +19,7 @@ void setup() {
 }
 
 void loop() {
-  boolean firstRun;
-  blink(2);
+  //blink(2);
   if (Serial.available() > 0) {
     command = Serial.read();
     if (command == '\r' || command == '\n' || command == ' ')
@@ -29,43 +27,34 @@ void loop() {
   }
   if (command != prevCommand) {
     prevCommand = command; 
-    firstRun = true;
-  } else {
-    firstRun = false;
   }
-  dispatchCommand(command, firstRun);
+  dispatchCommand(command);
 }
 
-void dispatchCommand(int command, boolean firstRun){
+void dispatchCommand(int command){
   uint32_t color;
   switch(command){
-    case POWER_UP:
+    case POWER_UP:                   
     case 'a':
-      if (firstRun)
-        solid_color(CRGB::Yellow);
+      solid_color(CRGB::Crimson);
       break; 
     case 'b':
-      if (firstRun)
-        solid_color(CRGB::Blue);
+      solid_color(CRGB::Blue);
       break;
     case 'g':
-      if (firstRun)
-        solid_color(CRGB::Green);
+      solid_color(CRGB::Green);
       break;
     case 'p':
       missing_dot_chase(CRGB::Red, 25);   
       break;
     case 'r':
-      if (firstRun)
-        solid_color(CRGB::Red);
+      solid_color(CRGB::Red);
       break;
     case 'w':
-      if (firstRun)
-        solid_color(CRGB::White);
+      solid_color(CRGB::White);
       break;
     default:
-      if (firstRun)
-        solid_color(CRGB::Orange);
+      solid_color(CRGB::Orange);
   }
   return;
 }
@@ -125,17 +114,22 @@ void althernate_colors(uint32_t fgcolor, uint32_t bgcolor) {
 
 void missing_dot_chase(uint32_t color, uint8_t wait){
   int led_number; 
-  int led_brightness = 100; 
+  int led_brightness = 80; 
+  static int white_led_number = 0; 
     FastLED.setBrightness(led_brightness);
     for(led_number = 0; led_number < NUM_LEDS; led_number++) 
       leds[led_number] = color;
-    for(led_number = 0; led_number < NUM_LEDS; led_number++) {
-      leds[led_number] = CRGB::Gray; 
-      if( led_number > 0 && led_number < NUM_LEDS) {
-        leds[led_number-1] = color;
-      }
-      FastLED.show();
-      delay(wait); 
+    leds[white_led_number] = CRGB::Snow; 
+    if(white_led_number > 0) {
+      leds[white_led_number-1] = color;
     }
+    if(white_led_number < (NUM_LEDS - 1)){
+      white_led_number++;
+    } 
+    else {
+      white_led_number = 0; 
+    }
+    FastLED.show();
+    delay(20); 
 }
 
